@@ -14,7 +14,7 @@ on:
   pull_request:
     branches: [ "master" ]
 
-# Needed so the dependency submission action can write to the dependency graph
+# Required so dependency submission can write to the dependency graph
 permissions:
   contents: write
 
@@ -25,7 +25,7 @@ jobs:
     strategy:
       matrix:
         module:
-          # Paths to your two pom.xml directories (relative to repo root)
+          # paths to the two pom.xml directories, relative to repo root
           - cab-book-driver-kafka-demo/cab-book-driver-kafka-demo
           - cab-book-user-kafka-demo/cab-book-user-kafka-demo
 
@@ -44,9 +44,16 @@ jobs:
         working-directory: ${{ matrix.module }}
         run: mvn -B clean verify
 
-      # Optional: Submit dependency graph for Dependabot / dependency graph features
+      # Optional: Upload dependency graph for each module
       - name: Submit dependency snapshot - ${{ matrix.module }}
         uses: advanced-security/maven-dependency-submission-action@v4
         with:
+          # directory containing the pom.xml of this module
           directory: ${{ matrix.module }}
+          # <--- THIS avoids the "cannot find mvnw" error
+          ignore-maven-wrapper: true
+          # include file paths in the snapshot (helps link to poms in UI)
+          snapshot-include-file-name: true
+          # unique correlator per module
           correlator: ${{ github.job }}-${{ matrix.module }}
+
