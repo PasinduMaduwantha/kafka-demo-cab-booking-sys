@@ -1,0 +1,13 @@
+package com.devpasindudemo.cab_book_driver_kafka_demo;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class CabBookDriverKafkaDemoApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(CabBookDriverKafkaDemoApplication.class, args);
+	}
+
+}
